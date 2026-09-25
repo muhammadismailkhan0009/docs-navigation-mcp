@@ -1,0 +1,39 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/project_map_hook.py\"",
+            "timeout": 5,
+            "additionalContextLimit": 8000,
+            "statusMessage": "Loading project map"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/project_map_hook.py\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/project_map_hook.py\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
