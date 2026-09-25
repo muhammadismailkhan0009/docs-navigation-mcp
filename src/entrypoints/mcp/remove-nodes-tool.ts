@@ -11,10 +11,10 @@ export function registerRemoveNodesTool(
   store: DocumentationStore,
 ): void {
   server.registerTool(
-    "remove_nodes",
+    "docs.nodes.remove",
     {
       description:
-        "Remove nodes. Recursive removal preserves descendants that still have another parent.",
+        "ADMIN tool. Remove stored documentation nodes from a source. Recursive removal preserves descendants that still remain reachable through another parent. Use this for corpus maintenance, not normal documentation retrieval.",
       inputSchema: z.object({
         source_id: sourceIdSchema,
         node_ids: z.array(nodeIdSchema).min(1).max(500),

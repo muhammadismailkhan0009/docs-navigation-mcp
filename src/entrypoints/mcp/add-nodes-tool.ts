@@ -18,9 +18,10 @@ const addNodeSchema = z.object({
 
 export function registerAddNodesTool(server: McpServer, store: DocumentationStore): void {
   server.registerTool(
-    "add_nodes",
+    "docs.nodes.add",
     {
-      description: "Add one or more documentation nodes to an existing source.",
+      description:
+        "INGESTION tool. Persist already-obtained authoritative documentation into an existing Docs Navigation source as structured nodes with raw content and parent relationships. Use this when building or extending the shared corpus, not as a substitute for docs.nodes.fetch_content during normal retrieval.",
       inputSchema: z.object({
         source_id: sourceIdSchema,
         nodes: z.array(addNodeSchema).min(1).max(500),

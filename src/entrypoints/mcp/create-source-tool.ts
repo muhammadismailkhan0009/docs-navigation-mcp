@@ -11,10 +11,10 @@ export function registerCreateSourceTool(
   store: DocumentationStore,
 ): void {
   server.registerTool(
-    "create_source",
+    "docs.sources.create",
     {
       description:
-        "Create an empty documentation source in the primary configured repository.",
+        "INGESTION/ADMIN tool. Create a new empty documentation corpus in the primary configured repository when deliberately importing documentation that is not already available via docs.sources.list. Do not create a new source merely to answer a question about an existing corpus.",
       inputSchema: z.object({
         name: z.string().min(1),
         type: z.string().min(1),

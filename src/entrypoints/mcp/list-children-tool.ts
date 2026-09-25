@@ -11,10 +11,10 @@ export function registerListChildrenTool(
   store: DocumentationStore,
 ): void {
   server.registerTool(
-    "list_children",
+    "docs.nodes.list_children",
     {
       description:
-        "List immediate child nodes under a source root or documentation node.",
+        "Navigate an existing prepared documentation corpus one hierarchy level at a time. Omit node_id to list source roots; pass a returned node ID to descend further. Use this after docs.sources.list to locate exact stored documentation instead of recrawling the original website.",
       inputSchema: z.object({
         source_id: sourceIdSchema,
         node_id: nodeIdSchema.optional(),

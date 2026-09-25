@@ -9,10 +9,10 @@ export function registerListSourcesTool(
   store: DocumentationStore,
 ): void {
   server.registerTool(
-    "list_sources",
+    "docs.sources.list",
     {
       description:
-        "List available documentation sources across configured local repositories.",
+        "START HERE for documentation retrieval. Lists documentation corpora already prepared and stored in Docs Navigation repositories. Check this before crawling the web or creating separate local doc files; if the needed source exists, navigate it with docs.nodes.list_children.",
     },
     async () => jsonResult(await listSources(store)),
   );

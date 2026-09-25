@@ -11,10 +11,10 @@ export function registerFetchDocsTool(
   store: DocumentationStore,
 ): void {
   server.registerTool(
-    "fetch_docs",
+    "docs.nodes.fetch_content",
     {
       description:
-        "Fetch raw documentation content for one or more exact node IDs.",
+        "Read the exact raw documentation content already stored for known node IDs. Normally discover node IDs with docs.nodes.list_children, then call this tool to ground coding or documentation answers. Prefer stored content here over recrawling or rebuilding a parallel local cache.",
       inputSchema: z.object({
         source_id: sourceIdSchema,
         node_ids: z.array(nodeIdSchema).min(1).max(100),

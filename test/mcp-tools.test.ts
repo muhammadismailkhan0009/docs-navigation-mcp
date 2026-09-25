@@ -42,20 +42,40 @@ describe("docs navigation MCP tools", () => {
     const { tools } = await client.listTools();
 
     expect(tools.map((tool) => tool.name).sort()).toEqual([
-      "add_nodes",
-      "create_source",
-      "fetch_docs",
-      "list_children",
-      "list_sources",
-      "remove_nodes",
-      "remove_source",
-      "update_nodes",
+      "docs.nodes.add",
+      "docs.nodes.fetch_content",
+      "docs.nodes.list_children",
+      "docs.nodes.remove",
+      "docs.nodes.update",
+      "docs.sources.create",
+      "docs.sources.list",
+      "docs.sources.remove",
     ]);
   });
+
+  it("advertises the retrieval-first documentation workflow", async () => {
+    const { tools } = await client.listTools();
+    const descriptions = new Map(
+      tools.map((tool) => [tool.name, tool.description ?? ""]),
+    );
+
+    expect(client.getInstructions()).toContain(
+      "prefer the stored corpus before crawling the web",
+    );
+    expect(descriptions.get("docs.sources.list")).toContain("START HERE");
+    expect(descriptions.get("docs.nodes.list_children")).toContain(
+      "instead of recrawling",
+    );
+    expect(descriptions.get("docs.nodes.fetch_content")).toContain(
+      "Prefer stored content",
+    );
+    expect(descriptions.get("docs.nodes.add")).toContain("INGESTION");
+  });
+
   it("supports a complete source lifecycle through MCP", async () => {
     const created = parseTextResult(
       await client.callTool({
-        name: "create_source",
+        name: "docs.sources.create",
         arguments: {
           name: "UIFlow",
           type: "library",
@@ -66,7 +86,7 @@ describe("docs navigation MCP tools", () => {
 
     const roots = parseTextResult(
       await client.callTool({
-        name: "add_nodes",
+        name: "docs.nodes.add",
         arguments: {
           source_id: created.id,
           nodes: [
@@ -81,7 +101,7 @@ describe("docs navigation MCP tools", () => {
 
     const [view] = parseTextResult(
       await client.callTool({
-        name: "add_nodes",
+        name: "docs.nodes.add",
         arguments: {
           source_id: created.id,
           nodes: [
@@ -98,7 +118,7 @@ describe("docs navigation MCP tools", () => {
 
     const listed = parseTextResult(
       await client.callTool({
-        name: "list_children",
+        name: "docs.nodes.list_children",
         arguments: { source_id: created.id, node_id: core.id },
       }),
     ) as { items: Array<{ id: string }> };
@@ -106,14 +126,14 @@ describe("docs navigation MCP tools", () => {
 
     const fetched = parseTextResult(
       await client.callTool({
-        name: "fetch_docs",
+        name: "docs.nodes.fetch_content",
         arguments: { source_id: created.id, node_ids: [view!.id] },
       }),
     ) as Array<{ content: string }>;
     expect(fetched[0]?.content).toBe("Initial raw docs");
 
     await client.callTool({
-      name: "update_nodes",
+      name: "docs.nodes.update",
       arguments: {
         source_id: created.id,
         nodes: [{ id: view!.id, content: "Updated raw docs" }],
@@ -122,13 +142,13 @@ describe("docs navigation MCP tools", () => {
 
     const updated = parseTextResult(
       await client.callTool({
-        name: "fetch_docs",
+        name: "docs.nodes.fetch_content",
         arguments: { source_id: created.id, node_ids: [view!.id] },
       }),
     ) as Array<{ content: string }>;
     expect(updated[0]?.content).toBe("Updated raw docs");
     await client.callTool({
-      name: "remove_nodes",
+      name: "docs.nodes.remove",
       arguments: {
         source_id: created.id,
         node_ids: [view!.id],
@@ -137,12 +157,12 @@ describe("docs navigation MCP tools", () => {
     });
 
     await client.callTool({
-      name: "remove_source",
+      name: "docs.sources.remove",
       arguments: { source_id: created.id },
     });
 
     const sources = parseTextResult(
-      await client.callTool({ name: "list_sources", arguments: {} }),
+      await client.callTool({ name: "docs.sources.list", arguments: {} }),
     ) as unknown[];
     expect(sources).toEqual([]);
   });

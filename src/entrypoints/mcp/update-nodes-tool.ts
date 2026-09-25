@@ -19,9 +19,10 @@ const updateNodeSchema = z.object({
 
 export function registerUpdateNodesTool(server: McpServer, store: DocumentationStore): void {
   server.registerTool(
-    "update_nodes",
+    "docs.nodes.update",
     {
-      description: "Update content, metadata, or hierarchy parents for existing nodes.",
+      description:
+        "INGESTION/MAINTENANCE tool. Refresh or reorganize existing stored documentation nodes, including raw content, metadata, and hierarchy parents. Use when authoritative docs have changed or the prepared corpus needs correction; normal documentation lookup should use docs.nodes.list_children and docs.nodes.fetch_content instead.",
       inputSchema: z.object({
         source_id: sourceIdSchema,
         nodes: z.array(updateNodeSchema).min(1).max(500),

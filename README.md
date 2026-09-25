@@ -78,19 +78,32 @@ The MCP endpoint is then:
 http://127.0.0.1:8765/mcp
 ```
 
+## Intended agent workflow
+
+Docs Navigation is a persistent prepared-documentation store, not a crawler.
+
+For normal documentation retrieval, agents should prefer the stored corpus before crawling the web or creating a separate local documentation cache:
+
+1. `docs.sources.list` — discover which prepared documentation corpora are already available.
+2. `docs.nodes.list_children` — navigate the selected corpus hierarchy until the relevant nodes are found.
+3. `docs.nodes.fetch_content` — read the exact stored raw documentation for those node IDs.
+
+External crawling is only needed when required documentation is absent or intentionally being refreshed. In that case, obtain authoritative material externally and ingest it into Docs Navigation.
+
 ## Retrieval tools
 
-- `list_sources` — list available documentation sources.
-- `list_children` — list immediate children of a source root or node.
-- `fetch_docs` — fetch raw content for exact node IDs.
+- `docs.sources.list` — start here; list prepared documentation sources.
+- `docs.nodes.list_children` — navigate immediate children of a source root or node.
+- `docs.nodes.fetch_content` — fetch exact stored raw content for known node IDs.
 
-## Ingestion tools
+## Ingestion and maintenance tools
 
-- `create_source` — create an empty source.
-- `add_nodes` — batch-add nodes under zero or more parents.
-- `update_nodes` — update node content, metadata, or parents.
-- `remove_nodes` — remove nodes, optionally recursively.
-- `remove_source` — remove an entire source.
+- `docs.sources.create` — create an empty documentation corpus for deliberate ingestion.
+- `docs.nodes.add` — persist new structured documentation nodes and raw content.
+- `docs.nodes.update` — refresh node content, metadata, or hierarchy.
+- `docs.nodes.remove` — remove stored nodes, optionally recursively.
+- `docs.sources.remove` — remove an entire documentation corpus.
+
 ## Storage format
 
 Each documentation repository uses a Git-friendly layout:

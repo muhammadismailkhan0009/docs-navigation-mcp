@@ -11,9 +11,10 @@ export function registerRemoveSourceTool(
   store: DocumentationStore,
 ): void {
   server.registerTool(
-    "remove_source",
+    "docs.sources.remove",
     {
-      description: "Remove a documentation source and all of its stored nodes.",
+      description:
+        "ADMIN tool. Remove an entire prepared documentation source and all of its stored nodes from Docs Navigation. Use this only for corpus maintenance or replacement, not normal documentation lookup.",
       inputSchema: z.object({ source_id: sourceIdSchema }),
     },
     async ({ source_id }) => {
