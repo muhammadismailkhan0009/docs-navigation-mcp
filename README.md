@@ -144,17 +144,29 @@ DOCNAV_REPOSITORIES=/path/to/docs-repo npm run dev
 ```
 ## Publishing
 
-The repository contains a GitHub Actions workflow that publishes to npm when a GitHub Release is published.
+The repository contains a tag-driven GitHub Actions release workflow.
 
-Before the first release:
+Before publishing:
 
 1. Create an npm automation/access token that can publish `@myriadcodelabs/docs-navigation-mcp`.
 2. Add it to the GitHub repository as the `NPM_TOKEN` Actions secret.
 3. Set the desired version in `package.json` and `src/index.ts`.
-4. Push the release commit and create a Git tag such as `v0.1.0`.
-5. Publish a GitHub Release for that tag.
+4. Commit and push the release changes.
+5. Create and push the matching Git tag, for example:
 
-The workflow verifies that the tag exactly matches the package version before publishing with npm provenance.
+```bash
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+Pushing the tag automatically:
+
+- verifies that the tag matches `package.json`,
+- runs the full release checks,
+- publishes that version to npm if it is not already present,
+- creates the matching GitHub Release with generated release notes if it does not already exist.
+
+The workflow is safe to rerun when the npm version or GitHub Release already exists.
 
 ## License
 
