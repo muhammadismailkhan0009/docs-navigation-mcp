@@ -1,5 +1,5 @@
 export const DOCS_NAVIGATION_MCP_NAME = "docs-navigation-mcp";
-export const DOCS_NAVIGATION_MCP_VERSION = "0.2.1";
+export const DOCS_NAVIGATION_MCP_VERSION = "0.3.0";
 
 export { createDocsNavigationMcpServer } from "./entrypoints/mcp/mcp-server.js";
 export { FilesystemDocumentationStore } from "./infrastructure/filesystem/filesystem-documentation-store.js";

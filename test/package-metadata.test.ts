@@ -11,10 +11,17 @@ describe("package metadata", () => {
   it("keeps npm and MCP identity in sync", async () => {
     const packageJson = JSON.parse(
       await readFile(new URL("../package.json", import.meta.url), "utf8"),
-    ) as { name: string; version: string };
+    ) as {
+      name: string;
+      version: string;
+      bin: Record<string, string>;
+    };
 
     expect(packageJson.name).toBe("@myriadcodelabs/docs-navigation-mcp");
     expect(DOCS_NAVIGATION_MCP_NAME).toBe("docs-navigation-mcp");
     expect(DOCS_NAVIGATION_MCP_VERSION).toBe(packageJson.version);
+    expect(packageJson.bin).toEqual({
+      "docs-navigation-mcp": "dist/main.js",
+    });
   });
 });

@@ -120,12 +120,49 @@ sources/
 
 Raw documentation is stored unchanged in `.content` files. JSON files contain navigation metadata only, so documentation repositories can be copied, cloned, versioned, or hosted on GitHub without a dedicated backend.
 
+## Local documentation viewer
+
+Starting Docs Navigation MCP also starts a read-only local browser for inspecting the exact sources, node hierarchy, and raw content stored in the configured documentation repositories.
+
+The same command runs both surfaces:
+
+```bash
+npx -y @myriadcodelabs/docs-navigation-mcp
+```
+
+- MCP traffic uses stdio for the connected client.
+- The viewer is available at:
+
+```text
+http://127.0.0.1:47831
+```
+
+Both surfaces use the same `FilesystemDocumentationStore` and the same repository configuration:
+
+```bash
+DOCNAV_REPOSITORIES="/path/to/nim:/path/to/uiflow" \
+npx -y @myriadcodelabs/docs-navigation-mcp
+```
+
+Optional viewer configuration:
+
+```bash
+DOCNAV_UI_HOST=127.0.0.1
+DOCNAV_UI_PORT=47831
+```
+
+The UI is intentionally **read-only**. Documentation ingestion, updates, and removal remain MCP operations. Use the viewer to inspect what agents have already stored; use the `docs.*` MCP tools to change the corpus.
+
+Human-readable viewer startup information is written to stderr so stdout remains reserved for the MCP stdio protocol. When the MCP stdio connection closes, the viewer closes with the same process.
+
 ## Install globally
 
 ```bash
 npm install -g @myriadcodelabs/docs-navigation-mcp
 docs-navigation-mcp
 ```
+
+The command starts both the MCP server and local viewer.
 
 ## Development
 
@@ -137,11 +174,14 @@ npm run build
 npm run release:check
 ```
 
-Run the source version over stdio:
+Run the source version:
 
 ```bash
 DOCNAV_REPOSITORIES=/path/to/docs-repo npm run dev
 ```
+
+This starts both stdio MCP and the local viewer. The frontend source remains under `web/` and is bundled into `dist/ui/` during `npm run build`.
+
 ## Publishing
 
 The repository contains a tag-driven GitHub Actions release workflow.
@@ -155,8 +195,8 @@ Before publishing:
 5. Create and push the matching Git tag, for example:
 
 ```bash
-git tag v0.2.0
-git push origin v0.2.0
+git tag v0.3.0
+git push origin v0.3.0
 ```
 
 Pushing the tag automatically:
