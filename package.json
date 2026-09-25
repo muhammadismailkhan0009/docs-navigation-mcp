@@ -5,6 +5,12 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "bin": {
     "docs-navigation-mcp": "dist/main.js"
   },
@@ -14,6 +20,8 @@
     "dev": "tsx src/main.ts",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build",
     "release:check": "npm run typecheck && npm test && npm run build && npm pack --dry-run"
   },
   "keywords": [
@@ -39,6 +47,10 @@
     "type": "git",
     "url": "git+https://github.com/muhammadismailkhan0009/docs-navigation-mcp.git"
   },
+  "bugs": {
+    "url": "https://github.com/muhammadismailkhan0009/docs-navigation-mcp/issues"
+  },
+  "homepage": "https://github.com/muhammadismailkhan0009/docs-navigation-mcp#readme",
   "dependencies": {
     "@modelcontextprotocol/server": "^2.1.0",
     "zod": "^4.6.5"
